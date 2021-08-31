@@ -1,6 +1,8 @@
 package Vistas;
 
+import Controladores.Analizador;
 import Controladores.LectorArchivo;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -38,11 +40,19 @@ public class VentanaVirus extends javax.swing.JFrame {
         jTextAreaContenido = new javax.swing.JTextArea();
         jButtonAnalizar = new javax.swing.JButton();
         jLabelTitulo = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextAreaContenido1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 204, 204));
 
         jTextFieldRuta.setEditable(false);
-        jTextFieldRuta.setText("Ruta Archivo");
+        jTextFieldRuta.setText("Ruta Archivo:");
+        jTextFieldRuta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldRutaActionPerformed(evt);
+            }
+        });
 
         jButtonBuscar.setText("Buscar");
         jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -53,6 +63,7 @@ public class VentanaVirus extends javax.swing.JFrame {
 
         jTextAreaContenido.setEditable(false);
         jTextAreaContenido.setColumns(20);
+        jTextAreaContenido.setLineWrap(true);
         jTextAreaContenido.setRows(5);
         jScrollPane1.setViewportView(jTextAreaContenido);
 
@@ -63,7 +74,15 @@ public class VentanaVirus extends javax.swing.JFrame {
             }
         });
 
+        jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(153, 0, 0));
         jLabelTitulo.setText("My Antivirus");
+
+        jTextAreaContenido1.setEditable(false);
+        jTextAreaContenido1.setColumns(20);
+        jTextAreaContenido1.setLineWrap(true);
+        jTextAreaContenido1.setRows(5);
+        jScrollPane2.setViewportView(jTextAreaContenido1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,7 +91,7 @@ public class VentanaVirus extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelTitulo)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
@@ -81,22 +100,28 @@ public class VentanaVirus extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonBuscar)
                             .addComponent(jButtonAnalizar))))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(jLabelTitulo)
+                .addGap(159, 159, 159))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
+                .addContainerGap()
                 .addComponent(jLabelTitulo)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldRuta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBuscar))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonAnalizar))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -138,9 +163,24 @@ public class VentanaVirus extends javax.swing.JFrame {
     //Evento para funcionalidad de analizar
     private void jButtonAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnalizarActionPerformed
         // TODO add your handling code here:
+        Analizador myAnalizador = new Analizador(bytesArchivo);
         
+        myAnalizador.cargarVirus();
+        String mensajeVirus = myAnalizador.detectarVirus();
         
+        jTextAreaContenido1.setText(mensajeVirus);
+        if (mensajeVirus.equals("No se encontro ningun virus.")) {
+            jTextAreaContenido1.setForeground(Color.green);
+            
+        } else {
+            jTextAreaContenido.setForeground(Color.red);
+            jTextAreaContenido1.setForeground(Color.red);
+        }
     }//GEN-LAST:event_jButtonAnalizarActionPerformed
+
+    private void jTextFieldRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRutaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldRutaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,7 +222,9 @@ public class VentanaVirus extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextAreaContenido;
+    private javax.swing.JTextArea jTextAreaContenido1;
     private javax.swing.JTextField jTextFieldRuta;
     // End of variables declaration//GEN-END:variables
 }

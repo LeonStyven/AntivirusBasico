@@ -14,6 +14,8 @@ public class Virus {
         this.nobreVirus = nobreVirus;
         this.secuenciaVirus = secuenciaVirus;
     }
-    
+    public byte[] getSecuenciaVirus() {
+        return secuenciaVirus;
+    }
     
 }
